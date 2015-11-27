@@ -10,7 +10,6 @@ var client = new net.Socket();
   client.connect(8888, 'localhost', function() {
   console.log('Connected');
   client.write('Hello, server! Love, Client.');
-  setInterval(ping,100);
 });
 
 client.on('data', function(data) {
@@ -21,9 +20,3 @@ client.on('data', function(data) {
 client.on('close', function() {
   console.log('Connection closed');
 });
-
-
-function ping() {
-  console.log('trying to ping');
-  client.write('Hello '+ new Date());
-}
