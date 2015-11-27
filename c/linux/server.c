@@ -97,7 +97,7 @@ int main(int argc , char *argv[])
                                 for(int j = 0; j < count; j++)
                                 {
                                     // message = tags[j]->friendly;
-                                     puts(tags[j]->friendly)
+                                    puts(tags[j]->friendly);
                                     message = "hello";
                                     write(client_sock , message , strlen(message));
                                 }
