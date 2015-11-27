@@ -67,67 +67,66 @@ int main(int argc , char *argv[])
     {
         puts("Connection accepted");
         puts("Handler assigned");
-    }
 
-    for(int m = 0; m < tests; m++)
-    {
-        total ++;
-        printf("\n\nTEST #%d\n", total);
-        if((numDevices = SkyeTek_DiscoverDevices(&devices)) > 0)
-        {
-            //printf("example: devices=%d", numDevices);
-            if((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
+        for(int m = 0; m < tests; m++)
             {
-                //printf("example: readers=%d\n", numReaders);
-                for(int i = 0; i < numReaders; i++)
+                total ++;
+                printf("\n\nTEST #%d\n", total);
+                if((numDevices = SkyeTek_DiscoverDevices(&devices)) > 0)
                 {
-                    printf("Reader Found: %s-%s-%s\n", readers[i]->manufacturer, readers[i]->model, readers[i]->firmware);
-                    for(int k = 0; k < iterations; k++)
+                    //printf("example: devices=%d", numDevices);
+                    if((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
                     {
-                        printf("\tIteration = %d\n",k);
-                        status = SkyeTek_GetTags(readers[0], AUTO_DETECT, &tags, &count);
-                        if(status == SKYETEK_SUCCESS)
+                        //printf("example: readers=%d\n", numReaders);
+                        for(int i = 0; i < numReaders; i++)
                         {
-                            if(count == 0)
+                            printf("Reader Found: %s-%s-%s\n", readers[i]->manufacturer, readers[i]->model, readers[i]->firmware);
+                            for(int k = 0; k < iterations; k++)
                             {
-                                printf("\t\tNo tags found\n");
-                            }
-                            else
-                            {
-                                for(int j = 0; j < count; j++)
+                                printf("\tIteration = %d\n",k);
+                                status = SkyeTek_GetTags(readers[0], AUTO_DETECT, &tags, &count);
+                                if(status == SKYETEK_SUCCESS)
                                 {
-                                    // message = tags[j]->friendly;
-                                    puts(tags[j]->friendly);
-                                    message = "hello";
-                                    write(client_sock , message , strlen(message));
+                                    if(count == 0)
+                                    {
+                                        printf("\t\tNo tags found\n");
+                                    }
+                                    else
+                                    {
+                                        for(int j = 0; j < count; j++)
+                                        {
+                                            printf("\t\tTag Found: %s-%s\n", SkyeTek_GetTagTypeNameFromType(tags[j]->type), tags[j]->friendly);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    printf("ERROR: GetTags failed\n");
                                 }
                             }
-                        }
-                        else
-                        {
-                            printf("ERROR: GetTags failed\n");
+                            SkyeTek_FreeTags(readers[i],tags,count);
                         }
                     }
-                    SkyeTek_FreeTags(readers[i],tags,count);
+                    else
+                    {
+                        failures ++;
+                        printf("failures = %d/%d\n", failures, total);
+                        printf("ERROR: No readers found\n");
+                    }       
                 }
+                else
+                {
+                    failures ++;
+                    printf("failures = %d/%d\n", failures, total);
+                    printf("ERROR: No devices found\n");
+                }
+                SkyeTek_FreeDevices(devices,numDevices);
+                SkyeTek_FreeReaders(readers,numReaders);
+                usleep(delay);
             }
-            else
-            {
-                failures ++;
-                printf("failures = %d/%d\n", failures, total);
-                printf("ERROR: No readers found\n");
-            }       
-        }
-        else
-        {
-            failures ++;
-            printf("failures = %d/%d\n", failures, total);
-            printf("ERROR: No devices found\n");
-        }
-        SkyeTek_FreeDevices(devices,numDevices);
-        SkyeTek_FreeReaders(readers,numReaders);
-        usleep(delay);
     }
+
+    
      
     if (client_sock < 0)
     {
