@@ -94,8 +94,8 @@ int main(int argc , char *argv[])
                                {
                                    for(int j = 0; j < count; j++)
                                    {
-                                       // message = "\t\tTag Found: %s-%s\n", SkyeTek_GetTagTypeNameFromType(tags[j]->type), tags[j]->friendly;
-                                       message = "hello";
+                                       message = "Tag Found: %s-%s\n", SkyeTek_GetTagTypeNameFromType(tags[j]->type), tags[j]->friendly;
+                                       // message = "hello";
                                        write(client_sock , message , strlen(message));
                                    }
                                }
