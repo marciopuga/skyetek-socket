@@ -13,7 +13,7 @@ var client = new net.Socket();
 });
 
 client.on('data', function(data) {
-  console.log('Received: ', data);
+  console.log('Received: ', data.toString());
   // client.destroy(); // kill client after server's response
 });
 
