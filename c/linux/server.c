@@ -81,7 +81,7 @@ int main(int argc , char *argv[])
                 // for(int i = 0; i < numReaders; i++)
                 while(numReaders > 0)
                 {
-                    printf("Reader Found: %s-%s-%s\n", readers[i]->manufacturer, readers[i]->model, readers[i]->firmware);
+                    printf("Reader Found: %s-%s-%s\n", readers[0]->manufacturer, readers[0]->model, readers[0]->firmware);
                     for(int k = 0; k < iterations; k++)
                     {
                         printf("\tIteration = %d\n",k);
