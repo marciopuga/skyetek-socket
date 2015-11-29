@@ -133,6 +133,7 @@ int main(int argc , char *argv[])
      
     if (client_sock < 0)
     {
+        printf("Connection finished\n");
         perror("accept failed");
         return 1;
     }
