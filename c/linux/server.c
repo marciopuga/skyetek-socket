@@ -126,6 +126,7 @@ int main(int argc , char *argv[])
             }
             SkyeTek_FreeDevices(devices,numDevices);
             SkyeTek_FreeReaders(readers,numReaders);
+            usleep(delay);
         }
     }
 
