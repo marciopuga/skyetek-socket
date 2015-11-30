@@ -97,7 +97,7 @@ int main(int argc , char *argv[])
                     printf("ERROR: GetTags failed\n");
                 }
             }
-            SkyeTek_FreeTags(readers[i],tags,count);
+            SkyeTek_FreeTags(readers[0],tags,count);
         }
     }
 
