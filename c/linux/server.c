@@ -130,15 +130,15 @@ int main(int argc , char *argv[])
         }
     }
 
-    
+     //Free the socket pointer
+    close(client_sock);
      
     if (client_sock < 0)
     {
         perror("accept failed");
         return 1;
     }
-     //Free the socket pointer
-    close(client_sock);
+    
     return 0;
 }
  
