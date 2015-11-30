@@ -47,7 +47,6 @@ function clock() {
   console.log('Clock ticking', bottles)
   var diff;
   for (var i = 0; i < bottles.length; i++) {
-    
     diff = Date.now() - bottles[i].last_seen
     if(diff > 2000){
       console.log("-----------------Bottle", bottles[i].name, " WAS REMOVED");

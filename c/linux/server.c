@@ -28,8 +28,8 @@ int main(int argc , char *argv[])
     int numDevices = 0;
     int numReaders = 0;
     // const int delay = 400000;   //wait at least 400ms after closing the interface before re-opening (USB enumeration)
-    const int tests = 1;        //number of open/close tests to perform
-    const int iterations = 2000;  //number of select tag operations to perform for each test
+    const int tests = 20;        //number of open/close tests to perform
+    const int iterations = 10;  //number of select tag operations to perform for each test
     int failures = 0;
     int total = 0;
      
