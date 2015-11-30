@@ -68,77 +68,48 @@ int main(int argc , char *argv[])
         puts("Connection accepted");
         puts("Handler assigned");
 
-        for(int m = 0; m < tests; m++)
+        if((numDevices = SkyeTek_DiscoverDevices(&devices)) > 0)
         {
-            total ++;
-            printf("\n\nTEST #%d\n", total);
-            if((numDevices = SkyeTek_DiscoverDevices(&devices)) > 0)
+            while((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
             {
-                //printf("example: devices=%d", numDevices);
-                if((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
+                printf("\tIteration = %d\n",k);
+                status = SkyeTek_GetTags(readers[0], AUTO_DETECT, &tags, &count);
+                if(status == SKYETEK_SUCCESS)
                 {
-                    //printf("example: readers=%d\n", numReaders);
-                    for(int i = 0; i < numReaders; i++)
+                    if(count == 0)
                     {
-                        printf("Reader Found: %s-%s-%s\n", readers[i]->manufacturer, readers[i]->model, readers[i]->firmware);
-                        for(int k = 0; k < iterations; k++)
+                        printf("\t\tNo tags found\n");
+                    }
+                    else
+                    {
+                        for(int j = 0; j < count; j++)
                         {
-                            printf("\tIteration = %d\n",k);
-                            status = SkyeTek_GetTags(readers[0], AUTO_DETECT, &tags, &count);
-                            if(status == SKYETEK_SUCCESS)
-                            {
-                                if(count == 0)
-                                {
-                                    printf("\t\tNo tags found\n");
-                                }
-                                else
-                                {
-                                    for(int j = 0; j < count; j++)
-                                    {
-                                        // message = tags[j]->friendly;
-                                        puts(tags[j]->friendly);
-                                        message =  tags[j]->friendly ;
-                                        strcat(message,  "\n");
-                                        write(client_sock , message , strlen(message));
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                printf("ERROR: GetTags failed\n");
-                            }
+                            // message = tags[j]->friendly;
+                            puts(tags[j]->friendly);
+                            message =  tags[j]->friendly ;
+                            strcat(message,  "\n");
+                            write(client_sock , message , strlen(message));
                         }
-                        SkyeTek_FreeTags(readers[i],tags,count);
                     }
                 }
                 else
                 {
-                    failures ++;
-                    printf("failures = %d/%d\n", failures, total);
-                    printf("ERROR: No readers found\n");
-                }       
+                    printf("ERROR: GetTags failed\n");
+                }
             }
-            else
-            {
-                failures ++;
-                printf("failures = %d/%d\n", failures, total);
-                printf("ERROR: No devices found\n");
-            }
-            SkyeTek_FreeDevices(devices,numDevices);
-            SkyeTek_FreeReaders(readers,numReaders);
+            SkyeTek_FreeTags(readers[i],tags,count);
         }
     }
 
-    
      
     if (client_sock < 0)
     {
         printf("Connection finished\n");
-        SkyeTek_FreeDevices(devices,numDevices);
-        SkyeTek_FreeReaders(readers,numReaders);
         perror("accept failed");
         return 1;
     }
+    SkyeTek_FreeDevices(devices,numDevices);
+    SkyeTek_FreeReaders(readers,numReaders);
      //Free the socket pointer
     close(client_sock);
     return 0;
