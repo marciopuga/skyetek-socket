@@ -129,20 +129,19 @@ int main(int argc , char *argv[])
         }
     }
 
-    
+    SkyeTek_FreeDevices(devices,numDevices);
+    SkyeTek_FreeReaders(readers,numReaders);
      
     if (client_sock < 0)
     {
-        SkyeTek_FreeDevices(devices,numDevices);
-        SkyeTek_FreeReaders(readers,numReaders);
+        
         printf("Connection finished\n");
         perror("accept failed");
         return 1;
     }
      //Free the socket pointer
     close(client_sock);
-    SkyeTek_FreeDevices(devices,numDevices);
-    SkyeTek_FreeReaders(readers,numReaders);
+   
     return 0;
 }
  
