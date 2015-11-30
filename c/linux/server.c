@@ -85,20 +85,22 @@ int main(int argc , char *argv[])
     //Accept and incoming connection
     puts("Waiting for incoming connections...");
     c = sizeof(struct sockaddr_in);
+
+    if((numDevices = SkyeTek_DiscoverDevices(&devices)) > 0)
+    {
+        //printf("example: devices=%d", numDevices);
+        if((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
+        {
+            CallSelectTags(numReaders[0])
+        }
+    }
      
 
     while( (client_sock = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
     {
         puts("Connection accepted");
         puts("Handler assigned");
-        if((numDevices = SkyeTek_DiscoverDevices(&devices)) > 0)
-        {
-            //printf("example: devices=%d", numDevices);
-            if((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
-            {
-                CallSelectTags(numReaders[0])
-            }
-        }
+        
 
     }
     isStop = 1;
