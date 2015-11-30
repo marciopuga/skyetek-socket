@@ -28,8 +28,8 @@ int main(int argc , char *argv[])
     int numDevices = 0;
     int numReaders = 0;
     const int delay = 400000;   //wait at least 400ms after closing the interface before re-opening (USB enumeration)
-    const int tests = 2;        //number of open/close tests to perform
-    const int iterations = 50;  //number of select tag operations to perform for each test
+    const int tests = 100;        //number of open/close tests to perform
+    const int iterations = 1000;  //number of select tag operations to perform for each test
     int failures = 0;
     int total = 0;
      
@@ -136,6 +136,8 @@ int main(int argc , char *argv[])
     if (client_sock < 0)
     {
         perror("accept failed");
+        SkyeTek_FreeDevices(devices,numDevices);
+        SkyeTek_FreeReaders(readers,numReaders);
         return 1;
     }
     
