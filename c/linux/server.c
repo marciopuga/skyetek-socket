@@ -19,7 +19,7 @@ unsigned char SelectLoopCallback(LPSKYETEK_TAG lpTag, void *user)
     if( !isStop && lpTag != NULL ) {
         printf("Tag: %s;", lpTag->friendly);
         SkyeTek_GetTagTypeNameFromType(lpTag->type);
-        SkyeTek_FreeTag(lpTag);
+        // SkyeTek_FreeTag(lpTag);
     }
     return( !isStop );
 }
