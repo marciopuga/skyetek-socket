@@ -72,7 +72,6 @@ int main(int argc , char *argv[])
         {
             while((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
             {
-                printf("\tIteration = %d\n",k);
                 status = SkyeTek_GetTags(readers[0], AUTO_DETECT, &tags, &count);
                 if(status == SKYETEK_SUCCESS)
                 {
