@@ -17,7 +17,7 @@ unsigned char isStop = 0;
 unsigned char SelectLoopCallback(LPSKYETEK_TAG lpTag, void *user)
 {
     if( !isStop && lpTag != NULL ) {
-        printf(lpTag->friendly);
+        printf("Tag: %s; Type: %s\n", lpTag->friendly,
         SkyeTek_GetTagTypeNameFromType(lpTag->type);
         SkyeTek_FreeTag(lpTag);
     }
@@ -88,7 +88,7 @@ int main(int argc , char *argv[])
 
     if((numDevices = SkyeTek_DiscoverDevices(&devices)) > 0)
     {
-        printf("example: devices=%d", numDevices);
+        //printf("example: devices=%d", numDevices);
         if((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
         {
             CallSelectTags(readers[0]);
