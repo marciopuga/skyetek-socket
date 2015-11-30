@@ -13,6 +13,30 @@
  
 //the thread function
 // void *connection_handler(void *);
+unsigned char isStop = 0;
+unsigned char SelectLoopCallback(LPSKYETEK_TAG lpTag, void *user)
+{
+    if( !isStop && lpTag != NULL ) {
+        printf(“Tag: %s; Type: %s\n”, lpTag->friendly,
+        SkyeTek_GetTagTypeNameFromType(lpTag->type));
+        SkyeTek_FreeTag(lpTag);
+    }
+    return( !isStop );
+}
+
+int CallSelectTags(LPSKYETEK_READER lpReader)
+{
+    SKYETEK_STATUS st;
+    // the SkyeTek_SelectTags function does not return until the loop is done
+    printf("Entering select loop...\n");
+    st = SkyeTek_SelectTags(lpReader,AUTO_DETECT,SelectLoopCallback,0,1, NULL);
+    if( st != SKYETEK_SUCCESS ) {
+        printf("Select loop failed\n");
+        return 0;
+    }
+    printf("Select loop done\n");
+    return 1;
+}
  
 int main(int argc , char *argv[])
 {
@@ -67,68 +91,17 @@ int main(int argc , char *argv[])
     {
         puts("Connection accepted");
         puts("Handler assigned");
-
-        for(int m = 0; m < tests; m++)
+        if((numDevices = SkyeTek_DiscoverDevices(&devices)) > 0)
         {
-            total ++;
-            printf("\n\nTEST #%d\n", total);
-            if((numDevices = SkyeTek_DiscoverDevices(&devices)) > 0)
+            //printf("example: devices=%d", numDevices);
+            if((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
             {
-                //printf("example: devices=%d", numDevices);
-                if((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
-                {
-                    //printf("example: readers=%d\n", numReaders);
-                    for(int i = 0; i < numReaders; i++)
-                    {
-                        printf("Reader Found: %s-%s-%s\n", readers[i]->manufacturer, readers[i]->model, readers[i]->firmware);
-                        for(int k = 0; k < iterations; k++)
-                        {
-                            printf("\tIteration = %d\n",k);
-                            status = SkyeTek_GetTags(readers[0], AUTO_DETECT, &tags, &count);
-                            if(status == SKYETEK_SUCCESS)
-                            {
-                                if(count == 0)
-                                {
-                                    printf("\t\tNo tags found\n");
-                                }
-                                else
-                                {
-                                    for(int j = 0; j < count; j++)
-                                    {
-                                        // message = tags[j]->friendly;
-                                        puts(tags[j]->friendly);
-                                        message =  tags[j]->friendly ;
-                                        strcat(message,  "\n");
-                                        write(client_sock , message , strlen(message));
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                printf("ERROR: GetTags failed\n");
-                            }
-                        }
-                        SkyeTek_FreeTags(readers[i],tags,count);
-                    }
-                }
-                else
-                {
-                    failures ++;
-                    printf("failures = %d/%d\n", failures, total);
-                    printf("ERROR: No readers found\n");
-                }       
+                CallSelectTags(numReaders[0])
             }
-            else
-            {
-                failures ++;
-                printf("failures = %d/%d\n", failures, total);
-                printf("ERROR: No devices found\n");
-            }
-            SkyeTek_FreeDevices(devices,numDevices);
-            SkyeTek_FreeReaders(readers,numReaders);
         }
-    }
 
+    }
+    isStop = 1;
     SkyeTek_FreeDevices(devices,numDevices);
     SkyeTek_FreeReaders(readers,numReaders);
      
@@ -141,50 +114,9 @@ int main(int argc , char *argv[])
     }
      //Free the socket pointer
     close(client_sock);
-   
+
     return 0;
 }
- 
-// /*
-//  * This will handle connection for each client
-//  * */
-// void *connection_handler(void *socket_desc)
-// {
-//     //Get the socket descriptor
-//     int sock = *(int*)socket_desc;
-//     int read_size;
-//     char *message , client_message[2000];
-     
-//     //Send some messages to the client
-//     message = "Greetings! I am your connection handler\n";
-//     write(sock , message , strlen(message));
-     
-//     message = "Now type something and i shall repeat what you type \n";
-//     write(sock , message , strlen(message));
-     
-//     //Receive a message from client
-//     while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 )
-//     {
-//         //Send the message back to client
-//         write(sock , client_message , strlen(client_message));
-//         message = "\n ...another message...";
-//         write(sock , message , strlen(message));
-//     }
-     
-//     if(read_size == 0)
-//     {
-//         puts("Client disconnected");
-//         fflush(stdout);
-//     }
-//     else if(read_size == -1)
-//     {
-//         perror("recv failed");
-//     }
-         
-//     //Free the socket pointer
-//     free(socket_desc);
-     
-//     return 0;
-// }
+
 
 
