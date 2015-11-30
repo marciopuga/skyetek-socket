@@ -134,6 +134,8 @@ int main(int argc , char *argv[])
     if (client_sock < 0)
     {
         printf("Connection finished\n");
+        SkyeTek_FreeDevices(devices,numDevices);
+        SkyeTek_FreeReaders(readers,numReaders);
         perror("accept failed");
         return 1;
     }
