@@ -91,7 +91,7 @@ int main(int argc , char *argv[])
         //printf("example: devices=%d", numDevices);
         if((numReaders = SkyeTek_DiscoverReaders(devices,numDevices,&readers)) > 0 )
         {
-            CallSelectTags(readers[0])
+            CallSelectTags(readers[0]);
         }
     }
      
