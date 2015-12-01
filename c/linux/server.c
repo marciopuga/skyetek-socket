@@ -101,14 +101,16 @@ int main(int argc, char *argv[])
                                         strcat(message,  "\n");
                                         write(client_sock , message , strlen(message));
                                     }
+
                                 }
                             }
                             else
                             {
                                 printf("ERROR: GetTags failed\n");
                             }
+                            SkyeTek_FreeTags(readers[i],tags,count);
                         }
-                        SkyeTek_FreeTags(readers[i],tags,count);
+                        
                     }
                 }
                 else
