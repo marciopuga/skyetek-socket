@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Skyetek Reader</title>
+  </head>
+  <body>
+    <button type="button">Send</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      var url = "https://aircellar.herokuapp.com/"
+      console.log('starting connection to:',url);
+      var socket = io.connect(url);
+
+      socket.on('connect', function() {
+        console.log('Device connected');
+      });
+      
+      var bt =document.getElementsByTagName("button");
+      bt[0].onclick = function(){
+        socket.emit('data', {'hello': 'world'});
+     };
+
+
+    </script>
+  </body>
+</html>

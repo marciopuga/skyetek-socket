@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Skyetek</title>
+  </head>
+  <body>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+    var o = {test: 'hello', world: 'on fire'}
+    
+   
+
+      var url = "https://aircellar.herokuapp.com/";
+      console.log('starting connection to:',url);
+      var socket = io.connect(url);
+
+      socket.on('connect', function() {
+        console.log('Device connected');
+        document.write(Date(), ' : ', 'connected to the server');
+        document.write("<br>");
+      });
+      
+      socket.on('echo', function(d) {
+        document.write(Date(), ' : ',  JSON.stringify(d));
+        document.write("<br>");
+      });
+
+
+    </script>
+  </body>
+</html>
