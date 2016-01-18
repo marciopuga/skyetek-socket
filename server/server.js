@@ -17,11 +17,11 @@ console.log("websocket server created")
 wss.on("connection", function(ws) {
 
   ws.on("message", function(msg) {
-    console.log('message received', msg);
+    console.log(msg);
     ws.send('echo : '+ msg)
   })
 
-  console.log("websocket connection open")
+  console.log("websocket connection open");
 
   ws.on("close", function() {
     console.log("websocket connection close")
