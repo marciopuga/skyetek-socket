@@ -43,5 +43,5 @@ function kill(pid) {
 
 function run() {
   console.log('Running openFrameworks again');
-  exec("~/openFrameworks/apps/myApps/SkyeTek/make run ", puts);
+  exec("cd ~/openFrameworks/apps/myApps/SkyeTek/ && make run", puts);
 }
