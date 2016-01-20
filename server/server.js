@@ -3,6 +3,12 @@ var http = require("http")
 var express = require("express")
 var app = express()
 var port = process.env.PORT || 8887
+var ps = require('ps-node');
+var exec = require('child_process').exec;
+function puts(error, stdout, stderr) { console.log(stdout) }
+
+
+
 
 app.use(express.static(__dirname + "/"))
 
@@ -34,8 +40,51 @@ wss.on("connection", function(ws) {
   console.log("websocket connection open");
 
   ws.on("close", function() {
+    restartOF();
     console.log("websocket connection close")
    
   })
 })
+
+
+function restartOF(){
+  // A simple pid lookup
+  ps.lookup({
+      command: './SkyeTek',
+      psargs: 'ux'
+      }, function(err, resultList ) {
+      if (err) {
+          throw new Error( err );
+      }
+      if(resultList.length == 0) {
+        run();
+      }
+      resultList.forEach(function( process ){
+          if( process ){
+              console.log( 'PID: %s, COMMAND: %s, ARGUMENTS: %s', process.pid, process.command, process.arguments );
+              kill(process.pid);
+          }
+      });
+  });
+}
+
+
+
+function kill(pid) {
+  // A simple pid lookup
+  ps.kill( pid, function( err ) {
+      if (err) {
+          throw new Error( err );
+      }
+      else {
+          console.log( 'Process %s has been killed!', pid );
+          run();
+      }
+  });
+}
+
+function run() {
+  console.log('Running openFrameworks again');
+  exec("cd ~/openFrameworks/apps/myApps/SkyeTek/ && make run", puts);
+}
 
