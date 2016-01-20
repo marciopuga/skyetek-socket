@@ -18,7 +18,9 @@ ps.lookup({
     if (err) {
         throw new Error( err );
     }
-
+    if(resultList.length == 0) {
+      run();
+    }
     resultList.forEach(function( process ){
         if( process ){
             console.log( 'PID: %s, COMMAND: %s, ARGUMENTS: %s', process.pid, process.command, process.arguments );
@@ -37,4 +39,9 @@ function kill(pid) {
           console.log( 'Process %s has been killed!', pid );
       }
   });
+}
+
+function run() {
+  console.log('Running openFrameworks again');
+  exec("~/openFrameworks/apps/myApps/SkyeTek/make run ", puts);
 }
