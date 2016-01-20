@@ -38,7 +38,7 @@ wss.on("connection", function(ws) {
      var tags = []
      var o = {};
      for (var i in p.tags) {
-      o.timestamp = Date().now();
+      o.timestamp = Date.now();
       o.tag = p.tags[i];
       tags.push(o);
      }
