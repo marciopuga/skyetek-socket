@@ -37,6 +37,7 @@ function kill(pid) {
       }
       else {
           console.log( 'Process %s has been killed!', pid );
+          run();
       }
   });
 }
