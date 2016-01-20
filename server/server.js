@@ -26,8 +26,9 @@ console.log("websocket server created");
 
 restartOF();
 
-wss.on("connection", function(ws) {
 
+wss.on("connection", function(ws) {
+  var tags = {};
   ws.on("message", function(list) {
   
      var v = list.replace(/\'/g, '"');
@@ -35,9 +36,10 @@ wss.on("connection", function(ws) {
      
      var p = JSON.parse(v);
      console.log('BLOCK RECEIVED', Date());
-     var tags = {}
+     
      for (var i in p.tags) {
-      tags[p.tags[i]] = {}
+
+      if(tags[p.tags[i]] == null) tags[p.tags[i]] = {}
       tags[p.tags[i]].timestamp = Date.now()
      }
      firebaseRef.set(tags)
