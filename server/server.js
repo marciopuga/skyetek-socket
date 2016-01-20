@@ -5,9 +5,12 @@ var app = express()
 var port = process.env.PORT || 8887
 var ps = require('ps-node');
 var exec = require('child_process').exec;
+
+var Firebase = require('firebase');
+var url = 'https://aircellar.firebaseio.com/temp'
+var firebaseRef = new Firebase(url);
+
 function puts(error, stdout, stderr) { console.log(stdout) }
-
-
 
 
 app.use(express.static(__dirname + "/"))
@@ -32,9 +35,14 @@ wss.on("connection", function(ws) {
      
      var p = JSON.parse(v);
      console.log('BLOCK RECEIVED', Date());
+     var tags = []
+     var o = {};
      for (var i in p.tags) {
-      console.log(p.tags[i]);
+      o.timestamp = Date().now();
+      o.tag = p.tags[i];
+      tags.push(o);
      }
+     firebaseRef.set(tags)
      console.log('---------------');
 
   })
