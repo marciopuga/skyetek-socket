@@ -38,8 +38,9 @@ wss.on("connection", function(ws) {
      var tags = {}
      var o = {};
      for (var i in p.tags) {
-      tags[o.tag] = {}
+      tags[p.tags[i]] = {}
       tags[o.tag].timestamp = Date.now()
+      tags.push(o);
      }
      firebaseRef.set(tags)
      console.log('---------------');
