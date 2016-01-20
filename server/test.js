@@ -22,9 +22,7 @@ ps.lookup({
     resultList.forEach(function( process ){
         if( process ){
             console.log( 'PID: %s, COMMAND: %s, ARGUMENTS: %s', process.pid, process.command, process.arguments );
-            if(process.command.indexOf('Sublime') > 0) {
-              kill(process.pid);
-            }
+            kill(process.pid);
         }
     });
 });
