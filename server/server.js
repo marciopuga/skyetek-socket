@@ -36,11 +36,9 @@ wss.on("connection", function(ws) {
      var p = JSON.parse(v);
      console.log('BLOCK RECEIVED', Date());
      var tags = {}
-     var o = {};
      for (var i in p.tags) {
       tags[p.tags[i]] = {}
-      tags[o.tag].timestamp = Date.now()
-      tags.push(o);
+      tags[p.tags[i]].timestamp = Date.now()
      }
      firebaseRef.set(tags)
      console.log('---------------');
