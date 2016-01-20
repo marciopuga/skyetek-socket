@@ -12,7 +12,7 @@ function puts(error, stdout, stderr) { console.log(stdout) }
 
 // A simple pid lookup
 ps.lookup({
-    command: 'Sublime',
+    command: './SkyeTek',
     psargs: 'ux'
     }, function(err, resultList ) {
     if (err) {
